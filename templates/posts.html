@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Boards</title>
+  </head>
+  <body>
+    <h1>Boards</h1>
+    <ul>
+      {% for post in posts %}
+        <li><a href="posts/{{ post[0] }}/">{{ post[1] }}</a></li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
