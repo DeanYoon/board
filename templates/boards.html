@@ -10,5 +10,11 @@
         <li><a href="/boards/{{ board[0] }}/">{{ board[1] }}</a></li>
       {% endfor %}
     </ul>
+    <button id="add-board-button">Add Board</button>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/boards.js') }}"></script>
+  
+    
   </body>
 </html>
