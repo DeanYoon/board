@@ -4,8 +4,41 @@
     <title>Detail Post</title>
   </head>
   <body>
-    <h1>{{ title }} -- {{owner_name}}</h1>
-    <p>{{ content }}</p>
-    <p>Views: {{ views }}</p>
+    <h1>{{ post_data.title }} -- {{post_data.owner_name}}</h1>
+    <p>{{ post_data.content }}</p>
+    <p>Views: {{ post_data.views }}</p>
+    {% if post_data.user_id == current_user %}
+    <button id="edit-post-button">Edit</button>
+    <button id="delete-post-button">Delete</button>
+    {%endif%}
+    <hr />
+    <ul>
+      {% for comment in comments %}
+      <li>
+        <span class="comment_text">{{ comment.content }}</span> --
+        {{comment.username}} {% if comment.user_id == current_user%}
+        <button class="edit-comment-button" data-comment-id="{{ comment.id }}">
+          edit
+        </button>
+        <button
+          class="delete-comment-button"
+          data-comment-id="{{ comment.id }}"
+        >
+          delete
+        </button>
+        {%endif%}
+      </li>
+      {% endfor %}
+    </ul>
+    <form
+      action="/api/boards/{{board_id}}/posts/{{post_id}}/comments"
+      method="post"
+    >
+      <input type="text" name="comment" placeholder="add comment" />
+      <button>Submit</button>
+    </form>
+    <button id="back-post-button">Back to Post</button>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/posts.js') }}"></script>
   </body>
 </html>
