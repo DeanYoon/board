@@ -45,7 +45,6 @@ $(document).ready(function () {
 });
 
 //댓글 삭제 api 실행
-
 $(document).ready(function () {
   $(".delete-comment-button").click(function () {
     var commentId = $(this).data("comment-id");
@@ -68,38 +67,43 @@ $(document).ready(function () {
   $(".edit-comment-button").click(function () {
     var commentId = $(this).data("comment-id");
     var commentText = $(this).parent().find(".comment_text").text();
-    $(this).parent().empty().append(
-      '<input type="text" class="edit-comment-text" value="' + commentText + '">' +
-      '<button id="save-edit-comment-button" data-comment-id="' + commentId + '">Save</button>'
-    );  
+    $(this)
+      .parent()
+      .empty()
+      .append(
+        $("<form>").append(
+          $('<input type="text" class="edit-comment-text">').val(commentText),
+          $('<button id="save-edit-comment-button">')
+            .data("comment-id", commentId)
+            .text("Save")
+        )
+    );
+    setTimeout(function () {
+      $(".edit-comment-text").focus();
+
+    }, 0);
   });
-    // Click event handler for the save edit comment button
-    $(document).on("click", "#save-edit-comment-button", async function () {
-      var commentId = $(this).data("comment-id");
-      var editedCommentText = $(this).prev(".edit-comment-text").val();
+  // Click event handler for the save edit comment button
+  $(document).on("click", "#save-edit-comment-button", async function () {
+    var commentId = $(this).data("comment-id");
+    var editedCommentText = $(this).prev(".edit-comment-text").val();
 
-
-      await $.ajax({
-        url: '/api/comments/' + commentId,
-        type: "PUT",
-        data: {
-          comment_text:editedCommentText
-        },
-        success: function (response) {
-          location.reload();
-          
-
-        },
-        error: function (error) {
-          console.log(error)
-        }
-      })
-      // Add code here to save the edited comment
+    await $.ajax({
+      url: "/api/comments/" + commentId,
+      type: "PUT",
+      data: {
+        comment_text: editedCommentText,
+      },
+      success: function (response) {
+        location.reload();
+      },
+      error: function (error) {
+        console.log(error);
+      },
     });
+    // Add code here to save the edited comment
+  });
 });
-
-
-
 
 //포스팅 목록으로 돌아가는 함수
 $(document).ready(function () {
