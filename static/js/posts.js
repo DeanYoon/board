@@ -10,6 +10,33 @@ $(document).ready(function () {
   });
 });
 
+//post 추가 api호출
+$(document).ready(function () {
+  $("#add-post-form").submit(function (event) {
+    // Prevent the form from submitting normally
+    event.preventDefault();
+
+    var board_id = window.location.href.split("/")[4];
+
+    // Serialize the form data
+    var formData = $(this).serialize();
+    console.log(formData)
+    // Send an AJAX request to the add post API
+    $.ajax({
+      type: 'POST',
+      url: `/api/boards/${board_id}/posts`,
+      data: formData,
+      success: function (response) {
+        // Redirect to the posts page for the current board
+        window.location.href = `/boards/${board_id}/`;
+      },
+      error: function (xhr, status, error) {
+        // Show an error message
+        alert('Error: ' + xhr.responseText);
+      }
+    });
+  });
+});
 //포스트 수정 페이지로 이동
 $(document).ready(function () {
   $("#edit-post-button").click(function () {
@@ -133,3 +160,5 @@ $(document).on('click', '.like-comment-button', function() {
     }
   });
 });
+
+

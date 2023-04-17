@@ -1,11 +1,12 @@
 <html>
    <body>
-      <form action = "/api/boards" method = "post">
+      <form id="add-board-form">
          <p>Add Board</p>
          <p><input type = "text" name = "board_name" placeholder="Add New Board Name"/></p>
          <p><input type = "submit" value = "submit" /></p>
       </form>
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+      <script src="{{ url_for('static', filename='js/boards.js') }}"></script>
+
    </body>
 </html>
