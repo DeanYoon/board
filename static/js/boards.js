@@ -1,6 +1,6 @@
 $(document).ready(function() {
   $('#add-board-button').click(function() {
-    window.location.href = "/add_board";
+    window.location.href = "/add_board/";
   });
 });
 $(document).ready(function() {
@@ -8,3 +8,12 @@ $(document).ready(function() {
     window.location.href = "/";
   });
 });
+
+$(document).ready(function() {
+  $('#search-button').click(function() {
+    window.location.href = "/search";
+  });
+});
+
+
+

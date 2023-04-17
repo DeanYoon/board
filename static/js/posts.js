@@ -115,3 +115,21 @@ $(document).ready(function () {
     window.location.href = `/boards/${board_id}/`;
   });
 });
+
+
+//좋아요 버튼 클릭시 api 호출
+$(document).on('click', '.like-comment-button', function() {
+  var commentId = $(this).data('comment-id');
+  console.log(commentId)
+  $.ajax({
+    url: '/api/comments/' + commentId + '/like',
+    type: 'POST',
+    success: function(response) {
+      location.reload();
+      // Add code here to update the UI to show that the comment has been liked
+    },
+    error: function(error) {
+      console.log('Error liking comment:', error);
+    }
+  });
+});

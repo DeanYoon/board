@@ -6,8 +6,7 @@
   <body>
     <h1>{{ post_data.title }} -- {{post_data.owner_name}}</h1>
     <p>{{ post_data.content }}</p>
-    <p>Views: {{ post_data.views }}</p>
-    {% if post_data.user_id == current_user %}
+    {% if post_data.user_id == current_user or current_user ==1%}
     <button id="edit-post-button">Edit</button>
     <button id="delete-post-button">Delete</button>
     {%endif%}
@@ -15,8 +14,13 @@
     <ul>
       {% for comment in comments %}
       <li>
-        <span class="comment_text">{{ comment.content }}</span> --
-        {{comment.username}} {% if comment.user_id == current_user%}
+        <div>
+          {{comment.username}} --
+          <span class="comment_text">{{ comment.content }}</span> 
+          -- {{comment.likes}}
+          <button class="like-comment-button" data-comment-id="{{ comment.id }}">👍</button>
+        </div>
+        {% if comment.user_id == current_user %}
         <button class="edit-comment-button" data-comment-id="{{ comment.id }}">
           edit
         </button>

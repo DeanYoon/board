@@ -41,6 +41,24 @@ def add_board():
     return render_template("add_board.html")
 
 
+@app.route('/search/')
+def search():
+    return render_template('search.html')
+
+
+@app.route('/api/search', methods=['GET'])
+def get_posts_search():
+    search_query = request.args.get('query')
+    conn = sqlite3.connect('notice_board.db')
+    cursor = conn.cursor()
+    cursor.execute(
+        f"SELECT posts.*, users.username FROM posts JOIN users ON posts.user_id = users.id WHERE posts.title LIKE '%{search_query}%'")
+    results = cursor.fetchall()
+    conn.close()
+
+    return results, '200'
+
+
 @app.route('/boards/<board_id>/add_post/')
 def add_post(board_id):
     try:
@@ -288,6 +306,39 @@ def edit_comment_api(comment_id):
     cursor.execute(
         'UPDATE comments SET content = ?  WHERE id = ?',
         (comment_text, comment_id)
+    )
+    conn.commit()
+    conn.close()
+
+    return '200'
+
+# 좋아요,좋아요 취소 api
+
+
+@app.route('/api/comments/<comment_id>/like', methods=['POST'])
+def like_comment_api(comment_id):
+    current_user_id = session['user_id']
+
+    conn = sqlite3.connect('notice_board.db')
+    cursor = conn.cursor()
+    # get  current liked
+    cursor.execute(
+        f'SELECT liked_by_users from comments WHERE id={comment_id}'
+    )
+    try:
+        comment_liked_users = [int(x) for x in cursor.fetchone()[0].split(',')]
+    except:
+        comment_liked_users = []
+    if current_user_id not in comment_liked_users:
+        comment_liked_users.append(current_user_id)
+    else:
+        comment_liked_users.remove(current_user_id)
+
+    comment_num = len(comment_liked_users)
+    comment_liked_users = ','.join(str(x) for x in comment_liked_users)
+
+    cursor.execute(
+        f"UPDATE comments SET liked_by_users = '{comment_liked_users}', likes={comment_num} WHERE id = {comment_id}",
     )
     conn.commit()
     conn.close()
