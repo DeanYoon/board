@@ -1,0 +1,14 @@
+.post-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.post-form input,
+textarea {
+  width: 300px;
+}
+.post-form textarea {
+  height: 300px;
+}

@@ -2,16 +2,12 @@ $(document).ready(function () {
   $("#add-post-button").click(function () {
     window.location.href = "add_post";
   });
-});
 
-$(document).ready(function () {
   $("#back-board-button").click(function () {
     window.location.href = "/boards";
   });
-});
 
-//post 추가 api호출
-$(document).ready(function () {
+  //post 추가 api호출
   $("#add-post-form").submit(function (event) {
     // Prevent the form from submitting normally
     event.preventDefault();
@@ -20,10 +16,10 @@ $(document).ready(function () {
 
     // Serialize the form data
     var formData = $(this).serialize();
-    console.log(formData)
+    console.log(formData);
     // Send an AJAX request to the add post API
     $.ajax({
-      type: 'POST',
+      type: "POST",
       url: `/api/boards/${board_id}/posts`,
       data: formData,
       success: function (response) {
@@ -32,13 +28,12 @@ $(document).ready(function () {
       },
       error: function (xhr, status, error) {
         // Show an error message
-        alert('Error: ' + xhr.responseText);
-      }
+        alert("Error: " + xhr.responseText);
+      },
     });
   });
-});
-//포스트 수정 페이지로 이동
-$(document).ready(function () {
+
+  //포스트 수정 페이지로 이동
   $("#edit-post-button").click(function () {
     var url = window.location.href;
     var segments = url.split("/");
@@ -46,10 +41,48 @@ $(document).ready(function () {
     const post_id = segments[6];
     window.location.href = `/boards/${board_id}/posts/${post_id}/edit`;
   });
-});
 
-//포스트 삭제 api 실행
-$(document).ready(function () {
+  //paging 처리 in posts
+  $("#page-links a").click(function (event) {
+    event.preventDefault();
+    const page = $(this).data("page");
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set("page", page);
+    window.location.href = currentUrl.href;
+  });
+
+  //params 에 따른 페이지 select 값 고정 및 값 변화시 per_page변경
+  // Get the per page value from the query parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const perPage = urlParams.get("per_page") || 10;
+  const currentPage = parseInt(urlParams.get("page")) || 1;
+  // Loop through all the page links and add the "active" class to the current page link
+  $("#page-links a").each(function () {
+    if ($(this).data("page") == currentPage) {
+      $(this).addClass("active");
+    } else {
+      $(this).removeClass("active");
+    }
+  });
+
+  $(document).ready(function () {});
+
+  // list number change depending page and per_page value
+  var startNum = perPage * (currentPage - 1) + 1;
+  $("#posts-ol").attr("start", startNum);
+
+  // Set the selected option based on the per page value
+  $("#per-page").val(perPage);
+  $("#per-page").change(function () {
+    var perPage = $(this).val();
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set("per_page", perPage);
+    currentUrl.searchParams.set("page", 1);
+    window.location.href = currentUrl.href;
+    $("#per-page").val(perPage);
+  });
+
+  //포스트 삭제 api 실행
   $("#delete-post-button").click(function () {
     var url = window.location.href;
     var segments = url.split("/");
@@ -69,71 +102,8 @@ $(document).ready(function () {
       });
     }
   });
-});
 
-//댓글 삭제 api 실행
-$(document).ready(function () {
-  $(".delete-comment-button").click(function () {
-    var commentId = $(this).data("comment-id");
-    $.ajax({
-      url: "/api/comments/" + commentId,
-      type: "DELETE",
-      success: function (result) {
-        location.reload();
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        console.log(errorThrown);
-      },
-    });
-  });
-});
-
-//댓글수정 버튼 클릭시 텍스트가 input 으로 변하게
-
-$(document).ready(function () {
-  $(".edit-comment-button").click(function () {
-    var commentId = $(this).data("comment-id");
-    var commentText = $(this).parent().find(".comment_text").text();
-    $(this)
-      .parent()
-      .empty()
-      .append(
-        $("<form>").append(
-          $('<input type="text" class="edit-comment-text">').val(commentText),
-          $('<button id="save-edit-comment-button">')
-            .data("comment-id", commentId)
-            .text("Save")
-        )
-    );
-    setTimeout(function () {
-      $(".edit-comment-text").focus();
-
-    }, 0);
-  });
-  // Click event handler for the save edit comment button
-  $(document).on("click", "#save-edit-comment-button", async function () {
-    var commentId = $(this).data("comment-id");
-    var editedCommentText = $(this).prev(".edit-comment-text").val();
-
-    await $.ajax({
-      url: "/api/comments/" + commentId,
-      type: "PUT",
-      data: {
-        comment_text: editedCommentText,
-      },
-      success: function (response) {
-        location.reload();
-      },
-      error: function (error) {
-        console.log(error);
-      },
-    });
-    // Add code here to save the edited comment
-  });
-});
-
-//포스팅 목록으로 돌아가는 함수
-$(document).ready(function () {
+  //포스팅 목록으로 돌아가는 함수
   $("#back-post-button").click(function () {
     var url = window.location.href;
     var segments = url.split("/");
@@ -141,24 +111,39 @@ $(document).ready(function () {
 
     window.location.href = `/boards/${board_id}/`;
   });
-});
 
+  //포스팅 수정 api 호출
+  $("#edit-post-form").submit(function (event) {
+    // Prevent the form from submitting normally
+    event.preventDefault();
 
-//좋아요 버튼 클릭시 api 호출
-$(document).on('click', '.like-comment-button', function() {
-  var commentId = $(this).data('comment-id');
-  console.log(commentId)
-  $.ajax({
-    url: '/api/comments/' + commentId + '/like',
-    type: 'POST',
-    success: function(response) {
-      location.reload();
-      // Add code here to update the UI to show that the comment has been liked
-    },
-    error: function(error) {
-      console.log('Error liking comment:', error);
-    }
+    var url = window.location.href;
+    var urlParts = url.split("/");
+    var board_id = urlParts[4];
+    var post_id = urlParts[6];
+
+    // Get the form data
+    var formData = $(this).serialize();
+
+    // Send an AJAX request to the edit post API
+    $.ajax({
+      type: "POST",
+      url: `/api/boards/${board_id}/posts/${post_id}`,
+      data: formData,
+      success: function (response) {
+        // Show a success message
+        alert("Post edited successfully!");
+        window.location.href = `/boards/${board_id}/posts/${post_id}`;
+      },
+      error: function (xhr, status, error) {
+        // Show an error message
+        alert("Error: " + xhr.responseText);
+      },
+    });
   });
 });
 
-
+function getUrlParam(param, defaultValue) {
+  const params = new URLSearchParams(window.location.search);
+  return params.get(param) || defaultValue;
+}

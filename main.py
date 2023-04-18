@@ -1,5 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, session
-import sqlite3
+from flask import Flask
 from flask_session import Session
 from api.auth import auth_bp
 from api.post import post_api_bp

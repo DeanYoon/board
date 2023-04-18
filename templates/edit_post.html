@@ -1,12 +1,31 @@
 <html>
-   <body>
-      <form action = "/api/boards/{{board_id}}/posts/{{post_id}}" method = "POST">
-         <p>Edit Post</p>
-         <p><input type = "text" value="{{post_data.title}}" name = "post_title" placeholder="Add New Post Title"/></p>
-         <p><input type = "text" value="{{post_data.content}}" name = "post_content" placeholder="Add New Post"/></p>
-         <p><input type = "submit" value = "submit" /></p>
-      </form>
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-   </body>
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="{{ url_for('static', filename='css/add_post.css') }}"
+  />
+  <body>
+    <form
+      id="edit-post-form"
+      class="post-form"
+      action="/api/boards/{{board_id}}/posts/{{post_id}}"
+      method="POST"
+    >
+      <p>Edit Post</p>
+      <p>
+        <input
+          type="text"
+          value="{{post_data.title}}"
+          name="post_title"
+          placeholder="Add New Post Title"
+        />
+      </p>
+      <p>
+        <textarea required name="post_content">{{post_data.content}}</textarea>
+      </p>
+      <p><input type="submit" value="submit" /></p>
+    </form>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/posts.js') }}"></script>
+  </body>
 </html>

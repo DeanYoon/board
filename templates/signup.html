@@ -1,14 +1,29 @@
 <html>
-   <body>
-      <form id="sign-up__form" >
-         <p>Sign up Page</p>
-         <p><input type = "text" name = "username" placeholder="name"/></p>
-         <p><input type = "password" name = "password" placeholder="password"/></p>
-         <p><input type = "password" name = "password_conf" placeholder="confirm password"/></p>
-         <p><input type = "submit" value = "submit" /></p>
-      </form>
-      <a href="/">Login</a>
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-      <script src="{{ url_for('static', filename='js/login.js') }}"></script>
-   </body>
+  <body>
+    <form id="sign-up__form">
+      <p>Sign up Page</p>
+      <p><input type="text" name="username" placeholder="name" /></p>
+      <p>
+        <input
+          id="password1"
+          type="password"
+          name="password"
+          placeholder="password"
+        />
+      </p>
+      <p>
+        <input
+          id="password2"
+          type="password"
+          name="password_conf"
+          placeholder="confirm password"
+        />
+      </p>
+      <span id="password-message"></span>
+      <p><input type="submit" value="submit" /></p>
+    </form>
+    <a href="/">Login</a>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+  </body>
 </html>

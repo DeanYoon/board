@@ -24,7 +24,7 @@ def add_comment_api(board_id, post_id):
 
     conn.commit()
     conn.close()
-    return redirect(url_for("detail_post", board_id=board_id, post_id=post_id))
+    return '200'
 
 
 @comment_bp_api.route('/api/comments/<comment_id>', methods=['DELETE'])
