@@ -1,4 +1,5 @@
 $(document).ready(function () {
+  //댓글 작성 form
   $("#comment-form").submit(function (event) {
     // Prevent the form from submitting normally
     event.preventDefault();
@@ -26,28 +27,24 @@ $(document).ready(function () {
       },
     });
   });
-});
-
-//좋아요 버튼 클릭시 api 호출
-$(document).on("click", ".like-comment-button", function () {
-  var commentId = $(this).data("comment-id");
-  $.ajax({
-    url: "/api/comments/" + commentId + "/like",
-    type: "POST",
-    success: function (response) {
-      location.reload();
-      // Add code here to update the UI to show that the comment has been liked
-    },
-    error: function (error) {
-      console.log("Error liking comment:", error);
-      window.location.href = `/`;
-    },
+  //좋아요 버튼 클릭시 api 호출
+  $(document).on("click", ".like-comment-button", function () {
+    var commentId = $(this).data("comment-id");
+    $.ajax({
+      url: "/api/comments/" + commentId + "/like",
+      type: "POST",
+      success: function (response) {
+        location.reload();
+        // Add code here to update the UI to show that the comment has been liked
+      },
+      error: function (error) {
+        console.log("Error liking comment:", error);
+        window.location.href = `/`;
+      },
+    });
   });
-});
 
-//댓글수정 버튼 클릭시 텍스트가 input 으로 변하게
-
-$(document).ready(function () {
+  //댓글수정 버튼 클릭시 텍스트가 input 으로 변하게
   $(".edit-comment-button").click(function () {
     var commentId = $(this).data("comment-id");
     var commentText = $(this).parent().find(".comment_text").text();
@@ -85,12 +82,9 @@ $(document).ready(function () {
         console.log(error);
       },
     });
-    // Add code here to save the edited comment
   });
-});
 
-//댓글 삭제 api 실행
-$(document).ready(function () {
+  //댓글 삭제 api 실행
   $(".delete-comment-button").click(function () {
     var commentId = $(this).data("comment-id");
     $.ajax({

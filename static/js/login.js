@@ -17,10 +17,8 @@ $(document).ready(function () {
       },
     });
   });
-});
 
-//password validation
-$(document).ready(function () {
+  //password validation
   $("#password2").keyup(function () {
     var password1 = $("#password1").val();
     var password2 = $("#password2").val();
@@ -32,9 +30,7 @@ $(document).ready(function () {
       $("#password-message").text("");
     }
   });
-});
 
-$(document).ready(function () {
   $("#sign-up__form").on("submit", function (e) {
     e.preventDefault(); // prevent the form from submitting normally
     var formData = $(this).serialize(); // serialize the form data

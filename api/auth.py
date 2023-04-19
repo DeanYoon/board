@@ -46,25 +46,28 @@ def signup_api():
     if password != password_conf:
         return 'Wrong Password', 400
 
-    conn = sqlite3.connect('notice_board.db')
-    cursor = conn.cursor()
+    try:
+        conn = sqlite3.connect('notice_board.db')
+        cursor = conn.cursor()
 
-    cursor.execute('SELECT * FROM users WHERE username=?', (username,))
-    user = cursor.fetchone()
-    if (user):
-        return 'User Already Exists', 400
+        cursor.execute('SELECT * FROM users WHERE username=?', (username,))
+        user = cursor.fetchone()
+        if (user):
+            return 'User Already Exists', 400
 
-    cursor.execute(
-        'INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
-    conn.commit()
+        cursor.execute(
+            'INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
+        conn.commit()
 
-    cursor.execute('SELECT * FROM users WHERE username=?', (username,))
-    user = cursor.fetchone()
-    conn.close()
+        cursor.execute('SELECT * FROM users WHERE username=?', (username,))
+        user = cursor.fetchone()
+        conn.close()
 
-    if user:
-        session['user_id'] = user[0]
-        return username, 200
+        if user:
+            session['user_id'] = user[0]
+            return username, 200
 
-    else:
-        return 'Problem', 400
+        else:
+            return 'Problem', 400
+    except Exception as e:
+        return 'Error', 500
